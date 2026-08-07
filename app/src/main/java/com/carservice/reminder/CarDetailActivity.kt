@@ -18,6 +18,7 @@ class CarDetailActivity : AppCompatActivity() {
     private val db by lazy { AppDatabase.getInstance(this) }
     private var carId: Int = -1
     private var car: Car? = null
+    private var carNumber: Int = 0
 
     private val serviceNames = listOf(
         "روغن", "فیلتر روغن", "فیلتر هوا", "واسکارین",
@@ -32,24 +33,19 @@ class CarDetailActivity : AppCompatActivity() {
         carId = intent.getIntExtra("carId", -1)
         if (carId == -1) { finish(); return }
 
-        adapter = ServiceItemAdapter(emptyList()) { item ->
-            lifecycleScope.launch {
-                db.serviceItemDao().delete(item)
-                AlarmScheduler.cancel(this@CarDetailActivity, item.id)
-            }
-        }
-        binding.rvServices.layoutManager = LinearLayoutManager(this)
-        binding.rvServices.adapter = adapter
-
         lifecycleScope.launch {
             car = db.carDao().getById(carId)
+            carNumber = db.carDao().getCarNumber(carId)
             car?.let {
-                binding.tvCarTitle.text = "${it.name} - ${it.model} - ${it.plate}"
+                binding.tvCarTitle.text = "ماشین #$carNumber: ${it.name} - ${it.model} - ${it.plate}"
                 binding.etSocialLink.setText(it.socialLink ?: "")
             }
-        }
+            adapter = ServiceItemAdapter(emptyList(), carNumber) { item ->
+                showDeleteConfirm(item)
+            }
+            binding.rvServices.layoutManager = LinearLayoutManager(this@CarDetailActivity)
+            binding.rvServices.adapter = adapter
 
-        lifecycleScope.launch {
             db.serviceItemDao().getByCarId(carId).collect { list ->
                 adapter.submitList(list)
             }
@@ -67,6 +63,20 @@ class CarDetailActivity : AppCompatActivity() {
         }
 
         binding.fabAddService.setOnClickListener { showAddServiceDialog() }
+    }
+
+    private fun showDeleteConfirm(item: ServiceItem) {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("حذف سرویس")
+            .setMessage("سرویس «${item.name}» حذف شود؟")
+            .setPositiveButton("حذف") { _, _ ->
+                lifecycleScope.launch {
+                    db.serviceItemDao().delete(item)
+                    AlarmScheduler.cancel(this@CarDetailActivity, item.id)
+                }
+            }
+            .setNegativeButton("انصراف", null)
+            .show()
     }
 
     private fun showAddServiceDialog() {
