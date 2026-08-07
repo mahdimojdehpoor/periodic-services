@@ -38,11 +38,15 @@ class MainActivity : AppCompatActivity() {
 
         askNotificationPermission()
 
-        adapter = CarAdapter(emptyList()) { car ->
-            val intent = Intent(this, CarDetailActivity::class.java)
-            intent.putExtra("carId", car.id)
-            startActivity(intent)
-        }
+        adapter = CarAdapter(
+            emptyList(),
+            onClick = { car ->
+                val intent = Intent(this, CarDetailActivity::class.java)
+                intent.putExtra("carId", car.id)
+                startActivity(intent)
+            },
+            onLongClickDelete = { car -> showDeleteCarConfirm(car) }
+        )
         binding.rvCars.layoutManager = LinearLayoutManager(this)
         binding.rvCars.adapter = adapter
 
@@ -124,6 +128,23 @@ class MainActivity : AppCompatActivity() {
                     lifecycleScope.launch {
                         db.carDao().insert(Car(name = name, model = model, plate = plate))
                     }
+                }
+            }
+            .setNegativeButton("انصراف", null)
+            .show()
+    }
+
+    private fun showDeleteCarConfirm(car: Car) {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("حذف ماشین")
+            .setMessage("ماشین «${car.name}» و همه‌ی سرویس‌های آن حذف شود؟")
+            .setPositiveButton("حذف") { _, _ ->
+                lifecycleScope.launch {
+                    val services = db.serviceItemDao().getByCarIdOnce(car.id)
+                    for (s in services) {
+                        AlarmScheduler.cancel(this@MainActivity, s.id)
+                    }
+                    db.carDao().delete(car)
                 }
             }
             .setNegativeButton("انصراف", null)
