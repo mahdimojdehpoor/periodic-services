@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <Spinner
+        android:id="@+id/spinnerName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/etCurKm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="کیلومتر فعلی"
+        android:inputType="number"/>
+
+    <EditText
+        android:id="@+id/etNextKm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="کیلومتر بعدی"
+        android:inputType="number"/>
+
+    <Button
+        android:id="@+id/btnCurDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="انتخاب تاریخ فعلی"/>
+
+    <Button
+        android:id="@+id/btnNextDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="انتخاب تاریخ بعدی"/>
+
+</LinearLayout>
