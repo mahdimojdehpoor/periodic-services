@@ -11,6 +11,9 @@ interface ServiceItemDao {
     @Query("SELECT * FROM service_items WHERE carId = :carId ORDER BY id ASC")
     fun getByCarId(carId: Int): Flow<List<ServiceItem>>
 
+    @Query("SELECT * FROM service_items WHERE carId = :carId")
+    suspend fun getByCarIdOnce(carId: Int): List<ServiceItem>
+
     @Query("SELECT * FROM service_items WHERE nextDate > :now")
     suspend fun getAllFuture(now: Long): List<ServiceItem>
 
