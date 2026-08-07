@@ -19,6 +19,7 @@ class CarAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val car = cars[position]
+        holder.binding.tvCarNumber.text = "#${position + 1}"
         holder.binding.tvCarName.text = car.name
         holder.binding.tvCarModel.text = car.model
         holder.binding.tvCarPlate.text = car.plate
