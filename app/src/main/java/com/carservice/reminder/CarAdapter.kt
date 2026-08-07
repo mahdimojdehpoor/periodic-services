@@ -7,7 +7,8 @@ import com.carservice.reminder.databinding.ItemCarBinding
 
 class CarAdapter(
     private var cars: List<Car>,
-    private val onClick: (Car) -> Unit
+    private val onClick: (Car) -> Unit,
+    private val onLongClickDelete: (Car) -> Unit
 ) : RecyclerView.Adapter<CarAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ItemCarBinding) : RecyclerView.ViewHolder(binding.root)
@@ -24,6 +25,10 @@ class CarAdapter(
         holder.binding.tvCarModel.text = car.model
         holder.binding.tvCarPlate.text = car.plate
         holder.binding.root.setOnClickListener { onClick(car) }
+        holder.binding.root.setOnLongClickListener {
+            onLongClickDelete(car)
+            true
+        }
     }
 
     override fun getItemCount() = cars.size
