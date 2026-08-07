@@ -9,7 +9,8 @@ import java.util.Locale
 
 class ServiceItemAdapter(
     private var items: List<ServiceItem>,
-    private val onDelete: (ServiceItem) -> Unit
+    private val carNumber: Int,
+    private val onLongClickDelete: (ServiceItem) -> Unit
 ) : RecyclerView.Adapter<ServiceItemAdapter.ViewHolder>() {
 
     private val sdf = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
@@ -29,7 +30,11 @@ class ServiceItemAdapter(
         holder.binding.tvNextKm.text = item.nextKm.toString()
         holder.binding.tvCurDate.text = sdf.format(item.currentDate)
         holder.binding.tvNextDate.text = sdf.format(item.nextDate)
-        holder.binding.btnDelete.setOnClickListener { onDelete(item) }
+        holder.binding.tvTableNumber.text = "#$carNumber"
+        holder.binding.rowRoot.setOnLongClickListener {
+            onLongClickDelete(item)
+            true
+        }
     }
 
     override fun getItemCount() = items.size
