@@ -57,7 +57,7 @@
         <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2" android:text="کیلومتر بعدی" android:textStyle="bold" android:textSize="10sp" android:gravity="center"/>
         <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2" android:text="تاریخ فعلی" android:textStyle="bold" android:textSize="10sp" android:gravity="center"/>
         <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2" android:text="تاریخ بعدی" android:textStyle="bold" android:textSize="10sp" android:gravity="center"/>
-        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="حذف" android:textStyle="bold" android:textSize="11sp" android:gravity="center"/>
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="جدول" android:textStyle="bold" android:textSize="11sp" android:gravity="center"/>
 
     </LinearLayout>
 
